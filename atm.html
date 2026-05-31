@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Machine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="atm">
+        <h2>ATM Machine</h2>
+        <input type="password" id="pin" placeholder="Enter PIN">
+        <button onclick="login()">Login</button>
+        <div id="actions" style="display: none;">
+            <p>Balance: <span id="balance">$1000</span></p>
+            <input type="number" id="amount" placeholder="Enter amount">
+            <button onclick="withdraw()">Withdraw</button>
+            <input type="number" id="transferAmount" placeholder="Enter transfer amount">
+            <input type="text" id="recipient" placeholder="Enter recipient account">
+            <button onclick="transferMoney()">Transfer Money</button>
+            <button onclick="deposit()">Deposit Money</button>
+            <button onclick="checkMiniStatement()">Mini Statement</button>
+            <button onclick="changePin()">Change PIN</button>
+            <button onclick="viewLastTransaction()">Last Transaction</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <script>
+        let balance = 1000;
+        let pinCode = "1234";
+        let transactions = [];
+        
+        function login() {
+            let enteredPin = document.getElementById("pin").value;
+            if (enteredPin === pinCode) {
+                document.getElementById("actions").style.display = "block";
+            } else {
+                alert("Incorrect PIN!");
+            }
+        }
+
+        function withdraw() {
+            let amount = parseFloat(document.getElementById("amount").value);
+            if (amount > 0 && amount <= balance) {
+                balance -= amount;
+                transactions.push("Withdraw: $" + amount);
+                document.getElementById("balance").innerText = "$" + balance;
+                alert("Withdrawal successful!");
+            } else {
+                alert("Invalid amount!");
+            }
+        }
+
+        function transferMoney() {
+            let transferAmount = parseFloat(document.getElementById("transferAmount").value);
+            let recipient = document.getElementById("recipient").value;
+            if (transferAmount > 0 && transferAmount <= balance && recipient !== "") {
+                balance -= transferAmount;
+                transactions.push("Transfer: $" + transferAmount + " to " + recipient);
+                document.getElementById("balance").innerText = "$" + balance;
+                alert("Transferred $" + transferAmount + " to " + recipient + " successfully!");
+            } else {
+                alert("Invalid transfer details!");
+            }
+        }
+
+        function deposit() {
+            let depositAmount = parseFloat(prompt("Enter deposit amount:"));
+            if (depositAmount > 0) {
+                balance += depositAmount;
+                transactions.push("Deposit: $" + depositAmount);
+                document.getElementById("balance").innerText = "$" + balance;
+                alert("Deposit successful!");
+            } else {
+                alert("Invalid deposit amount!");
+            }
+        }
+
+        function checkMiniStatement() {
+            alert("Mini Statement:\n" + transactions.join("\n"));
+        }
+
+        function changePin() {
+            let newPin = prompt("Enter new PIN:");
+            if (newPin.length === 4 && !isNaN(newPin)) {
+                pinCode = newPin;
+                alert("PIN changed successfully!");
+            } else {
+                alert("Invalid PIN! Must be a 4-digit number.");
+            }
+        }
+
+        function viewLastTransaction() {
+            if (transactions.length > 0) {
+                alert("Last Transaction: " + transactions[transactions.length - 1]);
+            } else {
+                alert("No transactions yet!");
+            }
+        }
+
+        function logout() {
+            document.getElementById("actions").style.display = "none";
+            document.getElementById("pin").value = "";
+            alert("Logged out successfully!");
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin: 50px;
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: white;
+        }
+        .atm {
+            border: 2px solid #00ffcc;
+            padding: 20px;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 15px #00ffcc;
+            border-radius: 10px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 10px; 
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        button {
+            background: #00ffcc;
+            
+            color: #000;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #009999;
+        }
+    </style>
+</body>
+</html>
